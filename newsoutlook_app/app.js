@@ -1,7 +1,7 @@
 $(() => {
     //MENU TOGGLE BUTTON
     $('.menu-icon').on('click', function () {
-        $('nav button').toggleClass('showing');
+        $('nav button').toggleClass('show');
     });
     //SCROLLING EFFECT
 
@@ -996,7 +996,6 @@ $(() => {
         "fiasco": -3,
         "fidgety": -2,
         "fight": -1,
-        "fine": 2,
         "fire": -2,
         "fired": -2,
         "firing": -2,
@@ -2491,8 +2490,7 @@ $(() => {
         return wordArray;
     }
     //calculates the sentiment of a headline by comparing each word with the AFINN object    
-    function calculateSentimentScore(headline) {
-        let wordArray = makeWordArray(headline);
+    function calculateSentimentScore(wordArray) {
         let score = 0;
         for (i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray[i]]) {
@@ -2509,6 +2507,22 @@ $(() => {
     // let testHeadline = 'Rohingya groups apologise to Malaysia for Merhroms irresponsible statements';
     // console.log('Test headline sentiment score is ' + calculateSentimentScore(testHeadline));
 
+    $.ajax({
+        url: 'https://newsapi.org/v2/top-headlines?' + 'country=' + 'sg' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11',
+        method: 'GET',
+        dataType: 'JSON',
+        success: function (newsdata) {
+            let headlineArray = [];
+            let articlesObject = newsdata.articles;
+            for (i = 0; i < articlesObject.length; i++) {
+                let headline = articlesObject[i].title;
+                headlineArray.push(makeWordArray(headline));
+            }
+            let dataArray = [].concat.apply([], headlineArray);
+            console.log(dataArray);
+            console.log(calculateSentimentScore(dataArray));
+        }
+    })
 
     function removePublisher(title) {
         headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
@@ -2517,7 +2531,8 @@ $(() => {
 
     $('button').on('click', function () {
         $('.card-deck').empty();
-        let country = $(event.currentTarget).attr('class');
+        let country = $(event.currentTarget).attr('id');
+        console.log(country);
         let url = 'https://newsapi.org/v2/top-headlines?' + 'country=' + country + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
         $.ajax({
             url: url,
