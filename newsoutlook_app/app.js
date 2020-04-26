@@ -2494,6 +2494,10 @@ $(() => {
         }
         return score;
     }
+    function removePublisher(title){
+        headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
+        return headline;
+    }
 
     const promiseSG = 'https://newsapi.org/v2/top-headlines?' +
         'country=' + 'sg' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
@@ -2517,7 +2521,7 @@ $(() => {
                 let newsPublication = newsdata.articles[i].source.name;
                 //If statement to filter headlines fron ST, CNA and Today
                 if (newsPublication === 'Straitstimes.com' || newsPublication === 'Channelnewsasia.com' || newsPublication === 'Todayonline.com') {
-                    sgHeadline = articlesObject[i].title;
+                    sgHeadline = removePublisher(articlesObject[i].title);
                     let $sgCard = '';
                     headlineLink = articlesObject[i].url;
                     $sgCard += `
@@ -2544,7 +2548,7 @@ $(() => {
                 let newsPublication = newsdata.articles[i].source.name;
                 //If statement to filter headlines fron The Star, NST, and FMT
                 if (newsPublication === 'Thestar.com.my' || newsPublication === 'Nst.com.my' || newsPublication === 'Freemalaysiatoday.com') {
-                    myHeadline = articlesObject[i].title;
+                    myHeadline = removePublisher(articlesObject[i].title);
                     let $myCard = '';
                     headlineLink = articlesObject[i].url;
                     $myCard += `
