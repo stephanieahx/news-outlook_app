@@ -4,7 +4,14 @@ $(() => {
         $('nav button').toggleClass('show');
     });
     //SCROLLING EFFECT
-
+    $(window).on('scroll', function() {
+        if($(window).scrollTop()) {
+            $('nav').addClass('black');
+        }
+        else {
+            $('nav').removeClass('black');
+        }
+    })
     //AFINN OBJECT OF WORD-SENTIMENT SCORE PAIRS
     let afinn = {
         "abandon": -2,

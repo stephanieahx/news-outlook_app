@@ -10,50 +10,79 @@ body {
   }
 
   header {
-    position: fixed;
     width: 100%;
-    height: 20vh;
+    height: 50vh;
     background: url(https://video-images.vice.com/articles/5943107f86d77356702d66a9/lede/1497567544495-MCockrill_Exploding-Businessmen-Bunnies-New-York-Times_2017.jpeg?crop=1xw:0.7174xh;0xw,0xh&resize=1600:*) no-repeat 50% 50%;
     background-size: cover;
-    text-transform: uppercase;
   }
 
-  nav {
+nav {
     position: fixed;
     width: 100%;
     padding: 0;
-    overflow: hidden;
     text-align: center;
-    /* background: rgba(0,0,0,0); */
-    transition: 1s;
+    background: rgba(0,0,0,0);
+    transition: 1s; 
   }
 
-  .logo {
+/* nav button {
+  background: rgba(0,0,0,0);
+  overflow: hidden;
+  color: white;
+  padding: 0;
+  text-align: center;
+  margin: 0;
+} */
+
+nav.black {
+  background: black;
+  color: white;
+  height: 80px;
+}
+
+.logo {
+    text-transform: uppercase;
     position: fixed;
     float: left;
     margin: 16px 36px;
-    color: black;
+    color:white;
     font-weight: 900;
     font-size: 24px;
   }
 
+button {
+  margin: 16px 36px;
+  background: none;
+  color: white;
+  border:none;
+  text-shadow: 1px 2px black;
+  font-weight: 900;
+  padding: 15px 32px;
+  /* text-align: center; */
+  text-transform: uppercase;
+  /* text-decoration: none; */
+  /* display: inline-block; */
+  font-size: 16px;
+  }
+
 .menu-icon {
-  width: 100%;
-  height: 12vh;
-  background: #000;
-  text-align: right;
-  box-sizing: border-box;
-  padding: 15px 24px;
-  cursor: pointer;
-  color: #fff;
-  display: none;
-}
+    width: 100%;
+    height: 12vh;
+    background: #000;
+    text-align: right;
+    box-sizing: border-box;
+    padding: 15px 24px;
+    cursor: pointer;
+    color: #fff;
+    display: none;
+  }
+  
 
 @media(max-width: 600px) {
   menu {
     width: 100%;
-    margin: 0;
-    padding: 0;
+    margin: 10;
+    padding: 10;
   }
   button {
     /* max-height: 0px;
@@ -61,10 +90,10 @@ body {
     box-sizing: border-box;
     width: 100px; */
     display: none;
-    padding: 0;
-    margin:0;
+    /* padding: 0;
+    margin:0; */
   }
-  
+
 header {
   background: none;
 }
@@ -73,7 +102,6 @@ header {
   }
 
   .logo {
-    color: white;
     position: fixed;
     top: 0; 
     margin-top: 16px;
@@ -87,20 +115,6 @@ header {
   }
 }
 
-button {
-/* margin: 16px 36px; */
-background: none;
-color: white;
-border:none;
-text-shadow: 1px 2px black;
-font-weight: 900;
-padding: 15px 32px;
-/* text-align: center; */
-text-transform: uppercase;
-/* text-decoration: none; */
-/* display: inline-block; */
-font-size: 16px;
-}
 
 button:hover {
   background-color: rgba(255, 255, 255, 0.5);
@@ -108,7 +122,11 @@ button:hover {
   text-shadow: none;
 }
 
-  .card-deck {
+main {
+  margin: 4em auto;
+}
+
+.card-deck {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -117,7 +135,7 @@ button:hover {
     margin-right: 5%;
   }
 
-  .card {
+.card {
     float: left;
     width: 30%;
     margin: .5%;
@@ -125,6 +143,12 @@ button:hover {
     border-radius: 5px;
     padding: .5%;
     background: white;
+    /* font-family: 'Playfair Display', serif; */
+    overflow: scroll;
+  }
+
+.card:hover {
+    background-color: rgba(251, 167, 151, 0.2);
   }
 
 p {
@@ -134,9 +158,7 @@ p {
   padding: 10%;
 }
 
-.card:hover {
-  background-color: rgba(251, 167, 151, 0.2);
-}
+
 
 a {
   color: black;
