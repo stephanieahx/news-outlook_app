@@ -1,4 +1,11 @@
 $(() => {
+    //MENU TOGGLE BUTTON
+    $('.menu-icon').on('click', function() {
+        $('nav button').toggleClass('showing');
+    });
+    //SCROLLING EFFECT
+    
+    //AFINN OBJECT OF WORD-SENTIMENT SCORE PAIRS
     let afinn = {
         "abandon": -2,
         "abandoned": -2,
@@ -1363,7 +1370,7 @@ $(() => {
         "irrational": -1,
         "irresistible": 2,
         "irresolute": -2,
-        "irresponsible": 2,
+        "irresponsible": -2,
         "irreversible": -1,
         "irritate": -3,
         "irritated": -3,
@@ -2478,23 +2485,32 @@ $(() => {
         "zealots": -2,
         "zealous": 2
     }
-
+    //creates an array of words from a string
     function headlineWordArray(headline) {
         let headlineWordArray = headline.toLowerCase().split(/\W/);
         return headlineWordArray;
     }
-
+    //calculates the sentiment of a headline by comparing each word with the AFINN object    
     function calculateSentimentScore(headline) {
         let wordArray = headlineWordArray(headline);
         let score = 0;
         for (i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray[i]]) {
+                console.log(wordArray[i] + ': ' + afinn[wordArray[i]]);
                 score += afinn[wordArray[i]];
             }
         }
         return score;
     }
-    function removePublisher(title){
+
+    // let testString = 'happy great amazing'
+    // console.log('Test string sentiment score is ' + calculateSentimentScore(testString));
+
+    // let testHeadline = 'Rohingya groups apologise to Malaysia for Merhroms irresponsible statements';
+    // console.log('Test headline sentiment score is ' + calculateSentimentScore(testHeadline));
+
+
+    function removePublisher(title) {
         headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
         return headline;
     }
@@ -2512,23 +2528,21 @@ $(() => {
 
         success: function (newsdata) {
             let articlesObject = newsdata.articles;
-            let title;
             let sgHeadline;
             let headlineLink;
-            //for loop to filter through all of the Singapore articles
+            //Filtering through all Singapore articles
             for (i = 0; i < articlesObject.length; i++) {
-                //declaring a variable for the news publications (i.e. Straits Times, CNA or Today)
+                //Variable for the news publications (i.e. Straits Times, CNA or Today)
                 let newsPublication = newsdata.articles[i].source.name;
-                //If statement to filter headlines fron ST, CNA and Today
+                //Filtering headlines from ST, CNA and Today
                 if (newsPublication === 'Straitstimes.com' || newsPublication === 'Channelnewsasia.com' || newsPublication === 'Todayonline.com') {
                     sgHeadline = removePublisher(articlesObject[i].title);
-                    let $sgCard = '';
                     headlineLink = articlesObject[i].url;
+                    let $sgCard = '';
                     $sgCard += `
-                    <a href=${headlineLink}><dt>${sgHeadline}</dt></a>`
+                    <a href=${headlineLink}><dt class='headline'>${sgHeadline}</dt></a>`
                     $('#SG').append($sgCard);
                 }
-
             }
         }
     });
@@ -2540,7 +2554,6 @@ $(() => {
 
         success: function (newsdata) {
             let articlesObject = newsdata.articles;
-            let title;
             let myHeadline;
             let headlineLink;
             //for loop to filter through Malaysian articles
@@ -2549,8 +2562,8 @@ $(() => {
                 //If statement to filter headlines fron The Star, NST, and FMT
                 if (newsPublication === 'Thestar.com.my' || newsPublication === 'Nst.com.my' || newsPublication === 'Freemalaysiatoday.com') {
                     myHeadline = removePublisher(articlesObject[i].title);
-                    let $myCard = '';
                     headlineLink = articlesObject[i].url;
+                    let $myCard = '';
                     $myCard += `
                     <a href=${headlineLink}><dt>${myHeadline}</dt></a>`
                     $('#MY').append($myCard);
@@ -2559,4 +2572,5 @@ $(() => {
             }
         }
     });
+
 })

@@ -1,17 +1,110 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 body {
-    font-family: 'Open Sans', sans-serif;
-    text-align: center;
+    font-family: 'Quicksand', sans-serif;
     background: #efe8dc; 
-    /* color: #013A20; */
   }
+
+  header {
+    position: fixed;
+    width: 100%;
+    height: 20vh;
+    background: url(https://video-images.vice.com/articles/5943107f86d77356702d66a9/lede/1497567544495-MCockrill_Exploding-Businessmen-Bunnies-New-York-Times_2017.jpeg?crop=1xw:0.7174xh;0xw,0xh&resize=1600:*) no-repeat 50% 50%;
+    background-size: cover;
+    text-transform: uppercase;
+  }
+
+  nav {
+    position: fixed;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    text-align: center;
+    /* background: rgba(0,0,0,0); */
+    transition: 1s;
+  }
+
+  .logo {
+    position: fixed;
+    float: left;
+    margin: 16px 36px;
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+.menu-icon {
+  width: 100%;
+  height: 12vh;
+  background: #000;
+  text-align: right;
+  box-sizing: border-box;
+  padding: 15px 24px;
+  cursor: pointer;
+  color: #fff;
+  display: none;
+}
+
+@media(max-width: 600px) {
+  button {
+    /* max-height: 0px;
+    background: black;
+    box-sizing: border-box;
+    width: 100px; */
+    display: none;
+  }
+header {
+  background:none;
+}
+  .menu-icon {
+    display: block;
+  }
+
+  .logo {
+    color: white;
+    position: fixed;
+    top: 0; 
+    margin-top: 16px;
+  } 
+  .showing {
+    display: block;
+    max-height: 20em;
+    width: 100%;
+    background-color: black;
+  }
+}
+
+button {
+margin: 16px 36px;
+background: none;
+color: white;
+border:none;
+text-shadow: 1px 2px black;
+font-weight: 900;
+padding: 15px 32px;
+/* text-align: center; */
+text-transform: uppercase;
+/* text-decoration: none; */
+/* display: inline-block; */
+font-size: 16px;
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
   h5 {
     text-transform: uppercase;
+    text-align: center;
   }
   .card-deck {
     padding: 2px 16px;
     margin-left: 5%;
     margin-right: 5%;
-  
   }
   .card {
     float: left;
@@ -30,9 +123,11 @@ dt {
   border-top:solid 1px rgba(251, 167, 151, 0.2);
   padding: 10%;
 }
+
 dt:hover {
   background-color: rgba(251, 167, 151, 0.2);
 }
+
 a {
   color: black;
   text-decoration: none;
