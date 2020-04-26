@@ -1,10 +1,10 @@
 $(() => {
     //MENU TOGGLE BUTTON
-    $('.menu-icon').on('click', function() {
+    $('.menu-icon').on('click', function () {
         $('nav button').toggleClass('showing');
     });
     //SCROLLING EFFECT
-    
+
     //AFINN OBJECT OF WORD-SENTIMENT SCORE PAIRS
     let afinn = {
         "abandon": -2,
@@ -2485,14 +2485,14 @@ $(() => {
         "zealots": -2,
         "zealous": 2
     }
-    //creates an array of words from a string
-    function headlineWordArray(headline) {
-        let headlineWordArray = headline.toLowerCase().split(/\W/);
-        return headlineWordArray;
+    //CREATES AN ARRAY OF WORDS FROM A STRING
+    function makeWordArray(headline) {
+        let wordArray = headline.toLowerCase().split(/\W/);
+        return wordArray;
     }
     //calculates the sentiment of a headline by comparing each word with the AFINN object    
     function calculateSentimentScore(headline) {
-        let wordArray = headlineWordArray(headline);
+        let wordArray = makeWordArray(headline);
         let score = 0;
         for (i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray[i]]) {
@@ -2515,62 +2515,33 @@ $(() => {
         return headline;
     }
 
-    const promiseSG = 'https://newsapi.org/v2/top-headlines?' +
-        'country=' + 'sg' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
-    const promiseMY = 'https://newsapi.org/v2/top-headlines?' +
-        'country=' + 'my' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
-
-    //SG AJAX
-    $.ajax({
-        url: promiseSG,
-        method: 'GET',
-        dataType: 'JSON',
-
-        success: function (newsdata) {
-            let articlesObject = newsdata.articles;
-            let sgHeadline;
-            let headlineLink;
-            //Filtering through all Singapore articles
-            for (i = 0; i < articlesObject.length; i++) {
-                //Variable for the news publications (i.e. Straits Times, CNA or Today)
-                let newsPublication = newsdata.articles[i].source.name;
-                //Filtering headlines from ST, CNA and Today
-                if (newsPublication === 'Straitstimes.com' || newsPublication === 'Channelnewsasia.com' || newsPublication === 'Todayonline.com') {
-                    sgHeadline = removePublisher(articlesObject[i].title);
+    $('button').on('click', function () {
+        $('.card-deck').empty();
+        let country = $(event.currentTarget).attr('class');
+        let url = 'https://newsapi.org/v2/top-headlines?' + 'country=' + country + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (newsdata) {
+                let articlesObject = newsdata.articles;
+                let headline;
+                let headlineLink;
+                for (i = 0; i < articlesObject.length; i++) {
+                    headline = articlesObject[i].title;
                     headlineLink = articlesObject[i].url;
-                    let $sgCard = '';
-                    $sgCard += `
-                    <a href=${headlineLink}><dt class='headline'>${sgHeadline}</dt></a>`
-                    $('#SG').append($sgCard);
+                    let newsCards = '';
+                    newsCards += `
+                    <div class='card'> 
+                    <a href='${headlineLink}'><p class='headline'>${headline}</p></h5>
+                    </div>
+                    `;
+                    $(".card-deck").append(newsCards);
+                    // console.log(calculateSentimentScore(headline));
+                    console.log(makeWordArray(headline));
                 }
             }
-        }
-    });
-    //MY AJAX
-    $.ajax({
-        url: promiseMY,
-        method: 'GET',
-        dataType: 'JSON',
-
-        success: function (newsdata) {
-            let articlesObject = newsdata.articles;
-            let myHeadline;
-            let headlineLink;
-            //for loop to filter through Malaysian articles
-            for (i = 0; i < articlesObject.length; i++) {
-                let newsPublication = newsdata.articles[i].source.name;
-                //If statement to filter headlines fron The Star, NST, and FMT
-                if (newsPublication === 'Thestar.com.my' || newsPublication === 'Nst.com.my' || newsPublication === 'Freemalaysiatoday.com') {
-                    myHeadline = removePublisher(articlesObject[i].title);
-                    headlineLink = articlesObject[i].url;
-                    let $myCard = '';
-                    $myCard += `
-                    <a href=${headlineLink}><dt>${myHeadline}</dt></a>`
-                    $('#MY').append($myCard);
-                }
-
-            }
-        }
-    });
+        });
+    })
 
 })
