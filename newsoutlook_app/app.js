@@ -2495,54 +2495,64 @@ $(() => {
         return score;
     }
 
-    let url = 'https://newsapi.org/v2/top-headlines?' +
+    const promiseSG = 'https://newsapi.org/v2/top-headlines?' +
         'country=' + 'sg' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
+    const promiseMY = 'https://newsapi.org/v2/top-headlines?' +
+        'country=' + 'my' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
+
+    //SG AJAX
     $.ajax({
-        url: url,
+        url: promiseSG,
         method: 'GET',
         dataType: 'JSON',
 
         success: function (newsdata) {
             let articlesObject = newsdata.articles;
             let title;
-            let stHeadline;
-            let cnaHeadline;
-            let todayHeadline;
+            let sgHeadline;
             let headlineLink;
             //for loop to filter through all of the Singapore articles
             for (i = 0; i < articlesObject.length; i++) {
                 //declaring a variable for the news publications (i.e. Straits Times, CNA or Today)
                 let newsPublication = newsdata.articles[i].source.name;
-                //If statement to get Straits Times headlines
-                if (newsPublication === 'Straitstimes.com') {
-                    stHeadline = articlesObject[i].title.replace('- The Straits Times', '');
-                    let $stCard = '';
+                //If statement to filter headlines fron ST, CNA and Today
+                if (newsPublication === 'Straitstimes.com' || newsPublication === 'Channelnewsasia.com' || newsPublication === 'Todayonline.com') {
+                    sgHeadline = articlesObject[i].title;
+                    let $sgCard = '';
                     headlineLink = articlesObject[i].url;
-                    console.log(headlineLink);
-                    $stCard += `
-                    <a href=${headlineLink}><dt>${stHeadline}</dt></a>`
-                    $('#ST').append($stCard);
+                    $sgCard += `
+                    <a href=${headlineLink}><dt>${sgHeadline}</dt></a>`
+                    $('#SG').append($sgCard);
                 }
-                //If statement to get CNA headlines
-                if (newsPublication === "Channelnewsasia.com") {
-                    cnaHeadline = articlesObject[i].title.replace('- CNA', '');
-                    let $cnaCard = '';
-                    headlineLink = articlesObject[i].url;
-                    $cnaCard += `
-                    <a href=${headlineLink}><dt>${cnaHeadline}</dt></a>`
-                    $('#CNA').append($cnaCard);
-                }
-                //If statement to get TODAY headlines
-                if (newsPublication === "Todayonline.com") {
-                    todayHeadline = articlesObject[i].title;
-                    let $TodayCard = '';
-                    headlineLink = articlesObject[i].url;
-                    $TodayCard += `
-                    <a href=${headlineLink}><dt>${todayHeadline}</dt></a>`
-                    $('#TODAY').append($TodayCard);
-                }
+
             }
         }
     });
+    //MY AJAX
+    $.ajax({
+        url: promiseMY,
+        method: 'GET',
+        dataType: 'JSON',
 
+        success: function (newsdata) {
+            let articlesObject = newsdata.articles;
+            let title;
+            let myHeadline;
+            let headlineLink;
+            //for loop to filter through Malaysian articles
+            for (i = 0; i < articlesObject.length; i++) {
+                let newsPublication = newsdata.articles[i].source.name;
+                //If statement to filter headlines fron The Star, NST, and FMT
+                if (newsPublication === 'Thestar.com.my' || newsPublication === 'Nst.com.my' || newsPublication === 'Freemalaysiatoday.com') {
+                    myHeadline = articlesObject[i].title;
+                    let $myCard = '';
+                    headlineLink = articlesObject[i].url;
+                    $myCard += `
+                    <a href=${headlineLink}><dt>${myHeadline}</dt></a>`
+                    $('#MY').append($myCard);
+                }
+
+            }
+        }
+    });
 })
