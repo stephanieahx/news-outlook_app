@@ -11,7 +11,7 @@ body {
 
   header {
     width: 100%;
-    height: 50vh;
+    height: 30vh;
     background: url(https://video-images.vice.com/articles/5943107f86d77356702d66a9/lede/1497567544495-MCockrill_Exploding-Businessmen-Bunnies-New-York-Times_2017.jpeg?crop=1xw:0.7174xh;0xw,0xh&resize=1600:*) no-repeat 50% 50%;
     background-size: cover;
   }
@@ -20,24 +20,16 @@ nav {
     position: fixed;
     width: 100%;
     padding: 0;
-    text-align: center;
+    text-align: right;
     background: rgba(0,0,0,0);
     transition: 1s; 
+    height: 100px;
   }
-
-/* nav button {
-  background: rgba(0,0,0,0);
-  overflow: hidden;
-  color: white;
-  padding: 0;
-  text-align: center;
-  margin: 0;
-} */
 
 nav.black {
   background: black;
   color: white;
-  height: 80px;
+  height: 100px;
 }
 
 .logo {
@@ -48,13 +40,15 @@ nav.black {
     color:white;
     font-weight: 900;
     font-size: 24px;
+    text-align: center;
   }
 
 button {
-  margin: 16px 36px;
+  margin: 24px 16px;
   background: none;
   color: white;
   border:none;
+  border-radius: 2px;
   text-shadow: 1px 2px black;
   font-weight: 900;
   padding: 15px 32px;
@@ -78,7 +72,7 @@ button {
   }
   
 
-@media(max-width: 600px) {
+@media(max-width: 760px) {
   menu {
     width: 100%;
     margin: 10;
@@ -122,8 +116,12 @@ button:hover {
   text-shadow: none;
 }
 
-main {
-  margin: 4em auto;
+/* main {
+  margin: 0em auto;
+} */
+
+.overview {
+  text-align: center;
 }
 
 .card-deck {

@@ -2491,12 +2491,12 @@ $(() => {
         "zealots": -2,
         "zealous": 2
     }
-    //CREATES AN ARRAY OF WORDS FROM A STRING
+    //CREATES AN ARRAY OF LOWERCASE WORDS FROM A STRING
     function makeWordArray(headline) {
         let wordArray = headline.toLowerCase().split(/\W/);
         return wordArray;
     }
-    //calculates the sentiment of a headline by comparing each word with the AFINN object    
+    //CALCULATES SENTIMENT BY COMPARING EACH WORD WITH AFINN OBJECT
     function calculateSentimentScore(wordArray) {
         let score = 0;
         for (i = 0; i < wordArray.length; i++) {
@@ -2508,38 +2508,16 @@ $(() => {
         return score;
     }
 
-    // let testString = 'happy great amazing'
-    // console.log('Test string sentiment score is ' + calculateSentimentScore(testString));
+//FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
+    // function removePublisher(title) {
+    //     headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
+    //     return headline;
+    // }
 
-    // let testHeadline = 'Rohingya groups apologise to Malaysia for Merhroms irresponsible statements';
-    // console.log('Test headline sentiment score is ' + calculateSentimentScore(testHeadline));
-
-    $.ajax({
-        url: 'https://newsapi.org/v2/top-headlines?' + 'country=' + 'sg' + '&apiKey=82fe58b2a7bf409093b32e883f0dee11',
-        method: 'GET',
-        dataType: 'JSON',
-        success: function (newsdata) {
-            let headlineArray = [];
-            let articlesObject = newsdata.articles;
-            for (i = 0; i < articlesObject.length; i++) {
-                let headline = articlesObject[i].title;
-                headlineArray.push(makeWordArray(headline));
-            }
-            let dataArray = [].concat.apply([], headlineArray);
-            console.log(dataArray);
-            console.log(calculateSentimentScore(dataArray));
-        }
-    })
-
-    function removePublisher(title) {
-        headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
-        return headline;
-    }
-
+//CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
         $('.card-deck').empty();
         let country = $(event.currentTarget).attr('id');
-        console.log(country);
         let url = 'https://newsapi.org/v2/top-headlines?' + 'country=' + country + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
         $.ajax({
             url: url,
