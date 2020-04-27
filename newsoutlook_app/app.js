@@ -2535,7 +2535,9 @@ $(() => {
                 let wordArray = makeWordArray(stringOfHeadlines);
                 let score = calculateSentimentScore(wordArray);
                 console.log(score);
-
+                let scoreData = `
+                <td>${score}</td>`
+                $('.sentimentScores').append(scoreData);
             }
         })
     }
