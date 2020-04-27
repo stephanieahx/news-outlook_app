@@ -1,4 +1,8 @@
 $(() => {
+    //SHOW IMAGE BUTTON
+    $('.img-icon').on('click', function() {
+        $('img').toggleClass('show');
+    })
     //MENU TOGGLE BUTTON
     $('.menu-icon').on('click', function () {
         $('nav button').toggleClass('show');
@@ -2553,14 +2557,17 @@ $(() => {
             success: function (newsdata) {
                 let articlesObject = newsdata.articles;
                 let headline;
-                let headlineLink;
+                let articleLink;
+                let articleImg;
                 for (i = 0; i < articlesObject.length; i++) {
                     headline = articlesObject[i].title;
-                    headlineLink = articlesObject[i].url;
+                    articleLink = articlesObject[i].url;
+                    articleImg = articlesObject[i].urlToImage;
                     let newsCards = '';
                     newsCards += `
                     <div class='card'> 
-                    <a href='${headlineLink}'><p class='headline'>${headline}</p></h5>
+                    <img src='${articleImg}'>
+                    <a href='${articleLink}'><p class='headline'>${headline}</p></h5>
                     </div>
                     `;
                     $(".card-deck").append(newsCards);
