@@ -4,8 +4,8 @@ $(() => {
         $('nav button').toggleClass('show');
     });
     //SCROLLING EFFECT
-    $(window).on('scroll', function() {
-        if($(window).scrollTop()) {
+    $(window).on('scroll', function () {
+        if ($(window).scrollTop()) {
             $('nav').addClass('black');
         }
         else {
@@ -2501,20 +2501,45 @@ $(() => {
         let score = 0;
         for (i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray[i]]) {
-                console.log(wordArray[i] + ': ' + afinn[wordArray[i]]);
+                let $wordScore = wordArray[i] + ': ' + afinn[wordArray[i]];
+                let word = wordArray[i];
+                console.log($wordScore)
+                $('.word-cloud').append(word + ' ');
                 score += afinn[wordArray[i]];
             }
         }
         return score;
     }
 
-//FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
+    //FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
     // function removePublisher(title) {
     //     headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
     //     return headline;
     // }
 
-//CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
+    const countryArray = ['my', 'sg', 'gb', 'us']
+    for (countryIndex = 0; countryIndex < countryArray.length; countryIndex++) {
+        let countryUrl = 'https://newsapi.org/v2/top-headlines?' + 'country=' + countryArray[countryIndex] + '&apiKey=82fe58b2a7bf409093b32e883f0dee11'
+        $.ajax({
+            url: countryUrl,
+            method: 'GET',
+            dataType: 'JSON',
+            success: function (newsdata) {
+                let stringOfHeadlines = '';
+                let headlineArray = [];
+                let articlesObject = newsdata.articles;
+                for (i = 0; i < articlesObject.length; i++) {
+                    let headline = articlesObject[i].title;
+                    stringOfHeadlines += ' ' + headline;
+                }
+                let wordArray = makeWordArray(stringOfHeadlines);
+                let score = calculateSentimentScore(wordArray);
+                console.log(score);
+
+            }
+        })
+    }
+    //CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
         $('.card-deck').empty();
         let country = $(event.currentTarget).attr('id');
