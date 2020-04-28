@@ -1,4 +1,4 @@
-$(() => {
+$(async () => {
     //-- UI -- 
     //STICKY NAV
     $(window).on('scroll', function () {
@@ -18,7 +18,40 @@ $(() => {
         $('nav button').toggleClass('show');
     });
 
-    //-- SENTIMENT ANALYIS -- 
+    // -- SENTIMENT ANALYIS -- 
+    // // GOOGLE CLOUD API 
+    // // Imports the Google Cloud client library
+    // const language = require('@google-cloud/language');
+
+    // // Creates a client
+    // const client = new language.LanguageServiceClient();
+
+    // /**
+    //  * TODO(developer): Uncomment the following line to run this code.
+    //  */
+    // // const text = 'Your text to analyze, e.g. Hello, world!';
+
+    // // Prepares a document, representing the provided text
+    // const document = {
+    //     content: text,
+    //     type: 'PLAIN_TEXT',
+    // };
+
+    // // Detects the sentiment of the document
+    // const [result] = await client.analyzeSentiment({ document });
+
+    // const sentiment = result.documentSentiment;
+    // console.log('Document sentiment:');
+    // console.log(`  Score: ${sentiment.score}`);
+    // console.log(`  Magnitude: ${sentiment.magnitude}`);
+
+    // const sentences = result.sentences;
+    // sentences.forEach(sentence => {
+    //     console.log(`Sentence: ${sentence.text.content}`);
+    //     console.log(`  Score: ${sentence.sentiment.score}`);
+    //     console.log(`  Magnitude: ${sentence.sentiment.magnitude}`);
+    // });
+
     //AFINN OBJECT OF WORD-SENTIMENT SCORE PAIRS
     let afinn = {
         "abandon": -2,
@@ -2508,9 +2541,13 @@ $(() => {
     //CALCULATES SENTIMENT BY COMPARING EACH WORD WITH AFINN OBJECT
     function calculateSentimentScore(wordArray) {
         let score = 0;
-        for (i = 0; i < wordArray.length; i++) {
+        for (let i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray[i]]) {
                 score += afinn[wordArray[i]];
+            //     let $wordScore = wordArray[i] + ': ' + afinn[wordArray[i]];
+            //     let word = wordArray[i];
+            //     console.log($wordScore);
+            //     $('.word-cloud').append(' ' + word);
             }
         }
         return score;
@@ -2519,7 +2556,7 @@ $(() => {
     //CREATES WORD CLOUD OF SENTIMENT WORDS 
     function createSentimentWordCloud(wordArray) {
         let sentimentWordArray = [];
-        for (i = 0; i < wordArray.length; i++) {
+        for (let i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray(i)]) {
                 sentimentWordArray.push(wordArray[i]);
             }
@@ -2528,11 +2565,6 @@ $(() => {
             return sortedArray;
         }
     }
-    // let $wordScore = wordArray[i] + ': ' + afinn[wordArray[i]];
-    // let word = wordArray[i];
-    // console.log($wordScore)
-    // console.log(sentimentWordsArray);
-    // $('.word-cloud').append(sentimentWordsArray);
 
     //CALCULATING THE SENTIMENT SCORE OF HEADLINES FROM EACH COUNTRY
     const countryArray = ['my', 'sg', 'gb', 'us']
@@ -2551,21 +2583,23 @@ $(() => {
                 }
                 let headlineWordArray = makeWordArray(stringOfHeadlines);
                 let score = calculateSentimentScore(headlineWordArray);
-                createSentimentWordCloud(headlineWordArray);
                 console.log(score);
                 let scoreData = `
                 <td>${score}</td>`
                 $('.sentimentScores').append(scoreData);
+                // createSentimentWordCloud(headlineWordArray);
             }
         })
     }
 
     // -- NEWS CARDS -- 
+
     //FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
     // function removePublisher(title) {
     //     headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
     //     return headline;
     // }
+
     //CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
         $('.card-deck').empty();
@@ -2580,7 +2614,7 @@ $(() => {
                 let headline;
                 let articleLink;
                 let articleImg;
-                for (i = 0; i < articlesObject.length; i++) {
+                for (let i = 0; i < articlesObject.length; i++) {
                     headline = articlesObject[i].title;
                     articleLink = articlesObject[i].url;
                     articleImg = articlesObject[i].urlToImage;
@@ -2592,8 +2626,8 @@ $(() => {
                     </div>
                     `;
                     $(".card-deck").append(newsCards);
-                    // console.log(calculateSentimentScore(headline));
                     console.log(makeWordArray(headline));
+                    console.log(calculateSentimentScore(makeWordArray(headline)));
                 }
             }
         });
