@@ -1,13 +1,6 @@
 $(() => {
-    //SHOW IMAGE BUTTON
-    $('.img-icon').on('click', function() {
-        $('img').toggleClass('show');
-    })
-    //MENU TOGGLE BUTTON
-    $('.menu-icon').on('click', function () {
-        $('nav button').toggleClass('show');
-    });
-    //SCROLLING EFFECT
+    //-- UI -- 
+    //STICKY NAV
     $(window).on('scroll', function () {
         if ($(window).scrollTop()) {
             $('nav').addClass('black');
@@ -16,6 +9,16 @@ $(() => {
             $('nav').removeClass('black');
         }
     })
+    //SHOW IMAGE BUTTON
+    $('.img-icon').on('click', function () {
+        $('img').toggleClass('show');
+    })
+    //MENU TOGGLE BUTTON
+    $('.menu-icon').on('click', function () {
+        $('nav button').toggleClass('show');
+    });
+
+    //-- SENTIMENT ANALYIS -- 
     //AFINN OBJECT OF WORD-SENTIMENT SCORE PAIRS
     let afinn = {
         "abandon": -2,
@@ -2495,32 +2498,43 @@ $(() => {
         "zealots": -2,
         "zealous": 2
     }
+
     //CREATES AN ARRAY OF LOWERCASE WORDS FROM A STRING
     function makeWordArray(headline) {
         let wordArray = headline.toLowerCase().split(/\W/);
         return wordArray;
     }
+
     //CALCULATES SENTIMENT BY COMPARING EACH WORD WITH AFINN OBJECT
     function calculateSentimentScore(wordArray) {
         let score = 0;
         for (i = 0; i < wordArray.length; i++) {
             if (afinn[wordArray[i]]) {
-                let $wordScore = wordArray[i] + ': ' + afinn[wordArray[i]];
-                let word = wordArray[i];
-                console.log($wordScore)
-                $('.word-cloud').append(word + ' ');
                 score += afinn[wordArray[i]];
             }
         }
         return score;
     }
 
-    //FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
-    // function removePublisher(title) {
-    //     headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
-    //     return headline;
-    // }
+    //CREATES WORD CLOUD OF SENTIMENT WORDS 
+    function createSentimentWordCloud(wordArray) {
+        let sentimentWordArray = [];
+        for (i = 0; i < wordArray.length; i++) {
+            if (afinn[wordArray(i)]) {
+                sentimentWordArray.push(wordArray[i]);
+            }
+            let sortedArray = sentimentWordArray.sort();
+            consolelog(sortedArray);
+            return sortedArray;
+        }
+    }
+    // let $wordScore = wordArray[i] + ': ' + afinn[wordArray[i]];
+    // let word = wordArray[i];
+    // console.log($wordScore)
+    // console.log(sentimentWordsArray);
+    // $('.word-cloud').append(sentimentWordsArray);
 
+    //CALCULATING THE SENTIMENT SCORE OF HEADLINES FROM EACH COUNTRY
     const countryArray = ['my', 'sg', 'gb', 'us']
     for (countryIndex = 0; countryIndex < countryArray.length; countryIndex++) {
         let countryUrl = 'https://newsapi.org/v2/top-headlines?' + 'country=' + countryArray[countryIndex] + '&apiKey=82fe58b2a7bf409093b32e883f0dee11'
@@ -2530,14 +2544,14 @@ $(() => {
             dataType: 'JSON',
             success: function (newsdata) {
                 let stringOfHeadlines = '';
-                let headlineArray = [];
                 let articlesObject = newsdata.articles;
                 for (i = 0; i < articlesObject.length; i++) {
                     let headline = articlesObject[i].title;
                     stringOfHeadlines += ' ' + headline;
                 }
-                let wordArray = makeWordArray(stringOfHeadlines);
-                let score = calculateSentimentScore(wordArray);
+                let headlineWordArray = makeWordArray(stringOfHeadlines);
+                let score = calculateSentimentScore(headlineWordArray);
+                createSentimentWordCloud(headlineWordArray);
                 console.log(score);
                 let scoreData = `
                 <td>${score}</td>`
@@ -2545,6 +2559,13 @@ $(() => {
             }
         })
     }
+
+    // -- NEWS CARDS -- 
+    //FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
+    // function removePublisher(title) {
+    //     headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
+    //     return headline;
+    // }
     //CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
         $('.card-deck').empty();
