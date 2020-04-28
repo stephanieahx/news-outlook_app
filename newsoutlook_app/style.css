@@ -41,6 +41,7 @@ nav.black {
     font-weight: 900;
     font-size: 24px;
     text-align: center;
+    cursor: pointer;
   }
 
 button {
@@ -198,9 +199,9 @@ img.show {
     overflow: scroll;
   }
 
-.card:hover {
+/* .card:hover {
     background-color: rgba(251, 167, 151, 0.2);
-  }
+  } */
 
 p {
   margin: 10px;
