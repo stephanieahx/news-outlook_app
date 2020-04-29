@@ -10,6 +10,10 @@ $(() => {
             $('nav').removeClass('black');
         }
     })
+    //DROPDOWN MENU CLOSES WHEN SCROLLING
+    $(window).on('scroll', function () {
+        $('nav button').removeClass('show');
+    })
     //SHOW IMAGE BUTTON
     $('.img-icon').on('click', function () {
         $('img').toggleClass('show');
@@ -23,6 +27,7 @@ $(() => {
         e.preventDefault();
         location.reload();
     })
+
 
     //-- SENTIMENT ANALYIS -- 
 
@@ -54,13 +59,16 @@ $(() => {
         return score;
     }
 
-    //CREATES WORD CLOUD OF SENTIMENT WORDS 
-    function createSentimentWordCloud(sentimentArray) {
+    //CREATES WORD CLOUD OF SENTIMENT WORDS - not working 'Uncaught TypeError: headlineArray is not a function'
+    let sentimentArray = [];
+    function createSentimentWordCloud(headlineArray) {
         let sentimentWordArray = [];
-        for (let wordIndex = 0; wordIndex < sentimentArray.length; wordIndex++) {
-            if (afinn[sentimentArray(wordIndex)]) {
-                let sentimentWord = sentimentArray[wordIndex];
+        for (let wordIndex = 0; wordIndex < headlineArray.length; wordIndex++) {
+            if (afinn[headlineArray(wordIndex)]) {
+            console.log(headlineArray(wordIndex));
+                let sentimentWord = headlineArray[wordIndex];
                 console.log(sentimentWord);
+                $('.word-cloud').append(sentimentWordArray);
                 sentimentWordArray.push(sentimentWord);
             }
         }
@@ -86,11 +94,11 @@ $(() => {
                 }
                 let headlineWordArray = makeWordArray(stringOfHeadlines);
                 let score = calculateSentimentScore(headlineWordArray);
-                console.log(score);
                 let scoreData = `
                 <td>${score}</td>`
                 $('.sentimentScores').append(scoreData);
-                // createSentimentWordCloud(headlineWordArray);
+                console.log(headlineWordArray);
+                createSentimentWordCloud(headlineWordArray);
             }
         })
     }
@@ -138,16 +146,16 @@ $(() => {
 
     //WHEN YOU HOVER OVER A CARD IT IS RED OR GREEN ACCORDING TO IT'S SENTIMENT SCORE
     //FUNCTION MAKE BACKGROUND GREEN - NOT WORKING 
-    $('card').hover(function () {
-        if (parseInt($('.card').attr('id')) < 0) {
-            console.log($('.card').attr('id'));
-            console.log(parseInt($('.card').attr('id')));
-            $(this).css('background-color', 'red');
-        } else {
-            $(this).css('background-color', 'green')
-        }
-    })
-    //TOOLTIP TO DISPLAY SENTIMENT SCORE OF HEADLINE
+    // $('card').hover(function () {
+    //     if (parseInt($('.card').attr('id')) < 0) {
+    //         console.log($('.card').attr('id'));
+    //         console.log(parseInt($('.card').attr('id')));
+    //         $(this).css('background-color', 'red');
+    //     } else {
+    //         $(this).css('background-color', 'green')
+    //     }
+    // })
+    //TOOLTIP TO DISPLAY SENTIMENT SCORE OF HEADLINE - bootstrap not working well
     $( function() {
         $( document ).tooltip();
       } );
