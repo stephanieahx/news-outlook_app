@@ -49,18 +49,13 @@ $(() => {
         let score = 0;
         for (let wordscoreIndex = 0; wordscoreIndex < wordArray.length; wordscoreIndex++) {
             if (afinn[wordArray[wordscoreIndex]]) {
-                // console.log(wordArray[wordscoreIndex] + ': ' + afinn[wordArray[wordscoreIndex]]);
                 score += afinn[wordArray[wordscoreIndex]];
-                // let $wordScore = wordArray[i] + ': ' + afinn[wordArray[i]];
-                // let word = wordArray[i];
-                // console.log($wordScore);
-                // $('.word-cloud').append(' ' + word);
             }
         }
         return score;
     }
 
-    //CREATES AN OBJECT OF SENTIMENT WORDS THEIR SCORE AND THEIR FREQUENCY IN HEADLINES 
+    //CREATES AN OBJECT OF SENTIMENT WORDS WITH THEIR AFINN SCORE AND THEIR FREQUENCY IN HEADLINES 
     function createPrevailingSentimentObject(array) {
         let prevailingSentimentObject = {};
         let sortedArray = array.sort();
@@ -72,14 +67,34 @@ $(() => {
                 wordIndex = subsequentIndex;
                 subsequentIndex++;
                 prevailingSentimentObject[(sortedArray[wordIndex])] = {
+                    word: (sortedArray[wordIndex]),
                     frequency: subsequentIndex - originalIndex,
                     score: afinn[sortedArray[wordIndex]],
                 }
+                let wordData = `
+                <tr>
+                    <td>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
+                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
+                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
+                </tr>
+                `
+                    $('.sentimentWordsFrequency').append(wordData);
+
+
             } else {
                 prevailingSentimentObject[(sortedArray[wordIndex])] = {
+                    word: (sortedArray[wordIndex]),
                     frequency: 1,
                     score: afinn[sortedArray[wordIndex]],
                 }
+                let wordData = `
+                <tr>
+                    <td>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
+                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
+                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
+                </tr>
+                `
+                    $('.sentimentWordsFrequency').append(wordData);
             }
         }
         return prevailingSentimentObject;
@@ -98,8 +113,8 @@ $(() => {
         return (sentimentWordArray)
     }
 
-    //SENTIMENT ANALYSIS OF HEADLINES FROM EACH COUNTRY
-    const countryArray = ['my', 'sg', 'gb', 'us']
+    //SENTIMENT ANALYSIS OF HEADLINES FROM EACH COUNTRY 
+    const countryArray = ['my', 'sg', 'gb', 'us'];
     for (countryIndex = 0; countryIndex < countryArray.length; countryIndex++) {
         let countryUrl = 'https://newsapi.org/v2/top-headlines?' + 'country=' + countryArray[countryIndex] + '&apiKey=82fe58b2a7bf409093b32e883f0dee11'
         $.ajax({
@@ -114,6 +129,7 @@ $(() => {
                     stringOfHeadlines += ' ' + headline;
                 }
                 let headlineWordArray = makeWordArray(stringOfHeadlines);
+
                 //CALCULATES AGGREGATE SCORE OF ALL OF A COUNTRY'S HEADLINES 
                 let score = calculateSentimentScore(headlineWordArray);
                 let scoreData = `
@@ -121,34 +137,28 @@ $(() => {
                 $('.sentimentScores').append(scoreData);
                 //SENTIMENT WORD ARRAY 
                 let countrySentimentWordArray = createSentimentWordArray(headlineWordArray);
-                console.log(countrySentimentWordArray.sort())
+                console.log(countrySentimentWordArray.sort());
                 //A COUNTRY'S PREVAILING SENTIMENT - AN OBJECT THAT SHOWS WHICH SENTIMENT WORDS ARE APPEARING IN THEIR HEADLINES, HOW MANY TIMES THE WORD APPEARS, AND ITS AFINN SCORE
                 let countryPrevailingSentiment = createPrevailingSentimentObject(countrySentimentWordArray);
                 console.log(countryPrevailingSentiment);
                 for (let i = 0; i < countryPrevailingSentiment.length; i++) {
-                    let word = countryPrevailingSentiment[i];
+                    let word = countryPrevailingSentiment[Object.keys(countryPrevailingSentiment)[0]];
                     console.log(word);
-                    let wordAfinnScore = countryPrevailingSentiment[i[score]];
-                    console.log(AFINNscore);
-                    let wordFrequency = countryPrevailingSentiment[i[frequency]];
+
                 }
-                let sentimentData = `
-                <td>$`
             }
         })
     }
 
-    // -- NEWS CARDS -- 
 
-    //FUNCTION TO REMOVE PUBLISHER FROM HEADLINE AS PUBLISHER'S NAME MAY CORRUPT THE SENTIMENT SCORE CALCULATED. E.G. '- THE STAR' COMPUTES A SENTIMENT SCORE OF 
-    // function removePublisher(title) {
-    //     headline = title.replace(' - The Straits Times', '').replace(' - CNA', '').replace(' - Today', '').replace(' - The Star Online', '').replace(' - Free Malaysia Today', '')
-    //     return headline;
-    // }
+    // -- NEWS CARDS -- 
 
     //CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
+        //EMPTIES CARD DECK
         $('.card-deck').empty();
+        //HIDES OVERVIEW
+        $('div.overview').attr('class', 'overview-hide')
         let country = $(event.currentTarget).attr('id');
         let url = 'https://newsapi.org/v2/top-headlines?' + 'country=' + country + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
         $.ajax({
@@ -179,7 +189,7 @@ $(() => {
         });
     })
 
-    //WHEN YOU HOVER OVER A CARD IT IS RED OR GREEN ACCORDING TO IT'S SENTIMENT SCORE
+    //WHEN YOU HOVER OVER A CARD IT IS RED OR GREEN ACCORDING TO ITS SENTIMENT SCORE
     //FUNCTION MAKE BACKGROUND GREEN - NOT WORKING 
     // $('card').hover(function () {
     //     if (parseInt($('.card').attr('id')) < 0) {
@@ -190,8 +200,9 @@ $(() => {
     //         $(this).css('background-color', 'green')
     //     }
     // })
-    //TOOLTIP TO DISPLAY SENTIMENT SCORE OF HEADLINE - bootstrap not working properly - 'Uncaught TypeError: this.element.getAttribute is not a function'
-    // $(function () {
-    //     $(document).tooltip();
-    // });
+    //TOOL TIP FOR EACH CARD SHOWING THE HEADLINE'S SENTIMENT SCORE
+    $().tooltip();
+
+
+
 })

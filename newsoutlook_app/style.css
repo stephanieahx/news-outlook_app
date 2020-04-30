@@ -136,7 +136,11 @@ button:hover {
   text-align: center;
   padding: 4px 32px;
 }
+.overview-hide {
+  display: none;
+}
 /* TABLE */
+
 table, td, th {  
   border: .5px solid #efe8dc;
   /* text-align: left; */
@@ -147,7 +151,10 @@ table {
   width: 100%;
   background-color: rgba(255, 255, 255, 0.5);
 }
-
+th {
+  text-transform: uppercase;
+  font-weight: 900;
+}
 th, td {
   padding: 15px;
   width: 20%;
@@ -182,8 +189,9 @@ img.show {
     flex-direction: row;
     flex-wrap: wrap;
     padding: 2px 16px;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin: 5%;
+    /* margin-left: 5%;
+    margin-right: 5%; */
   }
 
 .card {
