@@ -55,7 +55,17 @@ $(() => {
         return score;
     }
 
-    //CREATES AN OBJECT OF SENTIMENT WORDS WITH THEIR AFINN SCORE AND THEIR FREQUENCY IN HEADLINES 
+    //COLOUR ACCORDING TO INTEGER - POSITIVE (GREEN) OR NEGATIVE (RED) SCORE
+    function scoreColor (score) {
+        if (score < 0) {
+            color = '#F08080';
+        } else {
+            color = '#3CB371';
+        }
+        return color;
+    }
+
+    //CREATES AN OBJECT OF SENTIMENT WORDS WITH THEIR AFINN SCORE AND THEIR FREQUENCY IN HEADLINES || CREATES A TABLE TO DISPLAY THIS DATA
     function createPrevailingSentimentObject(array) {
         let prevailingSentimentObject = {};
         let sortedArray = array.sort();
@@ -71,8 +81,9 @@ $(() => {
                     frequency: subsequentIndex - originalIndex,
                     score: afinn[sortedArray[wordIndex]],
                 }
+                let rowColor = scoreColor(prevailingSentimentObject[sortedArray[wordIndex]].score);
                 let wordData = `
-                <tr>
+                <tr style='background-color:${rowColor}'>
                     <td>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
@@ -87,8 +98,9 @@ $(() => {
                     frequency: 1,
                     score: afinn[sortedArray[wordIndex]],
                 }
+                let rowColor = scoreColor(prevailingSentimentObject[sortedArray[wordIndex]].score);
                 let wordData = `
-                <tr>
+                <tr style='background-color:${rowColor}'>
                     <td>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
