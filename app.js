@@ -1,6 +1,12 @@
 $(() => {
     //-- UI -- 
-
+    //INFO MODAL
+    $('.info-icon').on('click', function (e) {
+        $('#modal').css('display', 'block');
+    })
+    $('.closeModal').on('click', function (e) {
+        $('#modal').css('display', 'none');
+    })
     //LOGO REFRESH PAGE BUTTON 
     $('.logo').on('click', function (e) {
         e.preventDefault();
@@ -28,13 +34,21 @@ $(() => {
         $('nav button').removeClass('show');
     })
 
+    //-- ANCILLARY FUNCTIONS -- 
+    //GET TIME AND DATE OF LATEST UPDATE
+    function displayUpdateTime() {
+        $('.update-time').empty();
+        let UpdateTime = new Date();
+        let updatetimeData = `<p>UPDATED: ${UpdateTime}</p>`
+        $('.update-time').append(updatetimeData);
+    }
 
     //-- SENTIMENT ANALYIS -- 
 
     //GET AFINN OBJECT FROM CDN
     let afinn = {};
     jQuery.when(
-        $.getJSON('https://cdn.jsdelivr.net/npm/afinn-111@1.1.4/index.json')).done(function (json) {
+        $.getJSON('https://cdn.jsdelivr.net/npm/afinn-165@1.0.4/index.json')).done(function (json) {
             afinn = json;
         });
 
@@ -42,6 +56,24 @@ $(() => {
     function makeWordArray(headline) {
         let wordArray = headline.toLowerCase().split(/\W/);
         return wordArray;
+    }
+
+    // //EMOTICON ACCORDING TO SENTIMENT SCORE  
+    function determineScoreEmoticon(score) {
+        if (score > 10) {
+            scoreEmoticon = '<i class=\"far fa-laugh-wink\"></i>'
+        } else if (score <= 10 && score > 5) {
+            scoreEmoticon = '<i class=\"far fa-smile\"></i>';
+        } else if (score > 0 && score <= 5) {
+            scoreEmoticon = '<i class=\"far fa-meh\"></i>';
+        } else if (score <= 0 && score > -5) {
+            scoreEmoticon = '<i class=\"far fa-frown\"></i>';
+        } else if (score <= -5 && score > -10) {
+            scoreEmoticon = '<i class=\"far fa-sad-tear\"></i>';
+        } else if (score <= -10) {
+            scoreEmoticon = '<i class=\"far fa-sad-cry\"></i>'
+        }
+        return scoreEmoticon;
     }
 
     //CALCULATES SENTIMENT BY COMPARING EACH WORD WITH AFINN OBJECT
@@ -56,16 +88,16 @@ $(() => {
     }
 
     //COLOUR ACCORDING TO INTEGER - POSITIVE (GREEN) OR NEGATIVE (RED) SCORE
-    function scoreColor (score) {
+    function scoreColor(score) {
         if (score < 0) {
-            color = '#F08080';
+            color = 'rgba(178,49,64, 0.7)';
         } else {
-            color = '#3CB371';
+            color = 'rgba(49,178,99, 0.7)';
         }
         return color;
     }
 
-    //CREATES AN OBJECT OF SENTIMENT WORDS WITH THEIR AFINN SCORE AND THEIR FREQUENCY IN HEADLINES || CREATES A TABLE TO DISPLAY THIS DATA
+    //CREATES AN OBJECT OF SENTIMENT WORDS WITH THEIR AFINN SCORE AND THEIR FREQUENCY IN HEADLINES THEN CREATES A TABLE TO DISPLAY THIS DATA
     function createPrevailingSentimentObject(array) {
         let prevailingSentimentObject = {};
         let sortedArray = array.sort();
@@ -89,7 +121,7 @@ $(() => {
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
                 </tr>
                 `
-                    $('.sentimentWordsFrequency').append(wordData);
+                $('.sentimentWordsFrequency').append(wordData);
 
 
             } else {
@@ -106,7 +138,7 @@ $(() => {
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
                 </tr>
                 `
-                    $('.sentimentWordsFrequency').append(wordData);
+                $('.sentimentWordsFrequency').append(wordData);
             }
         }
         return prevailingSentimentObject;
@@ -125,7 +157,7 @@ $(() => {
         return (sentimentWordArray)
     }
 
-    //SENTIMENT ANALYSIS OF HEADLINES FROM EACH COUNTRY 
+    //OUTLOOK TABLE FOR SENTIMENT ANALYSIS 
     const countryArray = ['my', 'sg', 'gb', 'us'];
     for (countryIndex = 0; countryIndex < countryArray.length; countryIndex++) {
         let countryUrl = 'https://newsapi.org/v2/top-headlines?' + 'country=' + countryArray[countryIndex] + '&apiKey=82fe58b2a7bf409093b32e883f0dee11'
@@ -141,23 +173,18 @@ $(() => {
                     stringOfHeadlines += ' ' + headline;
                 }
                 let headlineWordArray = makeWordArray(stringOfHeadlines);
-
-                //CALCULATES AGGREGATE SCORE OF ALL OF A COUNTRY'S HEADLINES 
+                //CALCULATES AGGREGATE SCORE OF ALL HEADLINES 
                 let score = calculateSentimentScore(headlineWordArray);
+                let scoreEmoticon = determineScoreEmoticon(score);
                 let scoreData = `
-                <td>${score}</td>`
+                <td title='Aggregate Sentiment Score: ${score}'>${scoreEmoticon}</td>`
                 $('.sentimentScores').append(scoreData);
                 //SENTIMENT WORD ARRAY 
                 let countrySentimentWordArray = createSentimentWordArray(headlineWordArray);
-                console.log(countrySentimentWordArray.sort());
-                //A COUNTRY'S PREVAILING SENTIMENT - AN OBJECT THAT SHOWS WHICH SENTIMENT WORDS ARE APPEARING IN THEIR HEADLINES, HOW MANY TIMES THE WORD APPEARS, AND ITS AFINN SCORE
-                let countryPrevailingSentiment = createPrevailingSentimentObject(countrySentimentWordArray);
-                console.log(countryPrevailingSentiment);
-                for (let i = 0; i < countryPrevailingSentiment.length; i++) {
-                    let word = countryPrevailingSentiment[Object.keys(countryPrevailingSentiment)[0]];
-                    console.log(word);
-
-                }
+                //A COUNTRY'S PREVAILING SENTIMENT ANALYSIS - CREATES A TABLE TO LIST SENTIMENT WORDS WITH ITS AFINN-SCORE AND FREQUENCY IN CURRENT HEADLINES
+                createPrevailingSentimentObject(countrySentimentWordArray);
+                //DISPLAYS TIME OF LATEST UPDATE
+                displayUpdateTime();
             }
         })
     }
@@ -167,12 +194,23 @@ $(() => {
 
     //CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
+        //HIDES OVERVIEW
+        $('div.overview').attr('class', 'overview-hide');
         //EMPTIES CARD DECK
         $('.card-deck').empty();
-        //HIDES OVERVIEW
-        $('div.overview').attr('class', 'overview-hide')
+        //CLEARS UPDATE TIME
+        $('update-time').empty();
+        //CLEAR PAGE TITLE
+        $('.page-title').empty();
+        //CREATING PAGE TITLE
+        let countryName = $(event.currentTarget).html();
+        let title = `
+        <h1>The Latest News Headlines in ${countryName}</h1>`;
+        $('.page-title').append(title);
+        //CREATING API URL FOR SPECIFIC COUNTRY
         let country = $(event.currentTarget).attr('id');
         let url = 'https://newsapi.org/v2/top-headlines?' + 'country=' + country + '&apiKey=82fe58b2a7bf409093b32e883f0dee11';
+        //AJAX CALL
         $.ajax({
             url: url,
             method: 'GET',
@@ -197,24 +235,19 @@ $(() => {
                     $(".card-deck").append(newsCards);
                     // console.log(makeWordArray(headline));
                 }
-            }
+            },
+            complete: function () {
+                displayUpdateTime();
+            },
+            error: function () {
+                alert('Error.');
+            },
+
         });
+
     })
 
-    //WHEN YOU HOVER OVER A CARD IT IS RED OR GREEN ACCORDING TO ITS SENTIMENT SCORE
-    //FUNCTION MAKE BACKGROUND GREEN - NOT WORKING 
-    // $('card').hover(function () {
-    //     if (parseInt($('.card').attr('id')) < 0) {
-    //         console.log($('.card').attr('id'));
-    //         console.log(parseInt($('.card').attr('id')));
-    //         $(this).css('background-color', 'red');
-    //     } else {
-    //         $(this).css('background-color', 'green')
-    //     }
-    // })
     //TOOL TIP FOR EACH CARD SHOWING THE HEADLINE'S SENTIMENT SCORE
     $().tooltip();
-
-
 
 })

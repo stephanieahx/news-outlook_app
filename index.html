@@ -3,12 +3,10 @@
 
 <head>
   <!--JQuery-->
-  <script
-  src="https://code.jquery.com/jquery-3.5.0.min.js"
-  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
-  crossorigin="anonymous"></script>
-  <!--jsDelivr-->
-  <script src='https://cdn.jsdelivr.net/npm/afinn-111@1.1.4/index.json'></script>
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <!--jsDelivr for AFINN --->
+  <script src='https://cdn.jsdelivr.net/npm/afinn-165@1.0.4/index.json'></script>
   <!--Charts.js-->
   <script src='https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js'></script>
   <!--Popper-->
@@ -21,10 +19,8 @@
     crossorigin="anonymous"></script>
   <!--Fontawesome Icons-->
   <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
   <!--Fonts-->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <!--css-->
   <link href='style.css' rel='stylesheet' type='text/css'>
   <!--javascript-->
@@ -39,20 +35,112 @@
   <div class='wrapper'>
     <header>
       <nav>
-        <div class='menu-icon'>
-          <i style="font-size:24px" class="fa">&#xf0c9;</i>
-        </div>
+        <!-- LOGO || PAGE REFRESH BUTTON -->
         <div class='logo'>
           news<br>outlook
         </div>
+        <!-- MODAL - About this site -->
+        <div title='About this site' class='info-icon' id='openModal'>
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <div id='modal'>
+          <div id='modal-textbox'>
+            <div class='closeModal'>
+              <i style='float: right' class="fas fa-times"></i>
+            </div>
+            <h1>ABOUT NEWS OUTLOOK</h1>
+            <p>Hello there. This site performs rudimentary sentiment analyses of the latest news headlines.</p>
+            <p>The sentiment is determined by matching indvidual words within the text against AFINN-165. Aggregate
+              sentiment scores of headlines are calculated and displayed as raw numbers or as emoticons. This is not the
+              most sophisticated way to analyse sentiment but it's the best I can do right now ¯\_(ツ)_/¯</p>
+            <h2>AFINN-165</h2>
+            <p>Developed by Danish data scientist Finn Årup Nielsen, AFINN is one of the simplest lexicons for sentiment
+              analysis.</p>
+            <p>The current version of the lexicon is AFINN-165 and it contains over three thousand words with a polarity
+              score ranging from [- 5] to [5] associated with each word.</p>
+            <p>Positive words (adjectives, verbs, nouns and exclamations) have positive sentiment scores. While negative
+              words have negative scores. The more emotive the word, the larger its score's value. For instance -
+              <table>
+                <tr>
+                  <td class='positive'>Adorable</td>
+                  <td class='positive'>3</td>
+                  <td class='negative'>Hideous</td>
+                  <td class='negative'>- 3</td>
+                </tr>
+                <tr>
+                  <td class='positive'>Promote</td>
+                  <td class='positive'>1</td>
+                  <td class='negative'>Deny</td>
+                  <td class='negative'>- 2</td>
+                </tr>
+                <tr>
+                  <td class='positive'>God</td>
+                  <td class='positive'>1</td>
+                  <td class='negative'>Wanker</td>
+                  <td class='negative'>- 3</td>
+                </tr>
+                <tr>
+                  <td class='positive'>ROFLMAO</td>
+                  <td class='positive'>4</td>
+                  <td class='negative'>WTF</td>
+                  <td class='negative'>- 4</td>
+                </tr>
+              </table>
+            </p>
+            <small>
+              Source:
+              <br><a href='https://github.com/fnielsen/afinn'>Finn Årup Nielsen and the Technical University of Denmark
+                (2015)</a>
+            </small>
+            </ul>
+            <h2>The Sentiment Smiley Scale</h2>
+            <p></p>
+            <table>
+              <tr>
+                <th>Outlook</th>
+                <th>Aggregate AFINN-165 Score</th>
+              </tr>
+              <tr>
+                <td><i class="far fa-laugh-wink"></i></td>
+                <td>Greater than or equal to 10</td>
+              </tr>
+              <tr>
+                <td><i class="far fa-smile"></i></td>
+                <td>Less than 10 and greater than or equal to 5</td>
+              </tr>
+              <tr>
+                <td><i class="far fa-meh"></i></td>
+                <td>Less than or equal to 5 and greater than 0</td>
+              </tr>
+              <tr>
+                <td><i class="far fa-frown"></i></td>
+                <td>Greater than - 5 and less than or equal to 0</td>
+              </tr>
+              <tr>
+                <td><i class="far fa-sad-tear"></i></td>
+                <td>Less than -5 and greater than or equal to -10</td>
+              </tr>
+              <tr>
+                <td><i class="far fa-sad-cry"></i></td>
+                <td>Less than -10</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- BUTTON - displays images of news articles-->
+        <div title='Display images' class='img-icon'>
+          <i class="far fa-image"></i>
+        </div>
+        <!-- BUTTON (only appears on small screens) - shows dropdown menu -->
+        <div class='menu-icon'>
+          <i class="fa">&#xf0c9;</i>
+        </div>
+        <!-- MENU - list of countries -->
         <div class='menu'>
           <button id='my'>Malaysia</button>
           <button id="sg">Singapore</button>
           <button id='gb'>U.K.</button>
           <button id="us">U.S.</button>
-        </div>
-        <div class='img-icon'>
-          <i class="far fa-image"></i>
         </div>
       </nav>
     </header>
@@ -62,27 +150,29 @@
       <h1>What's the outlook?</h1>
       <table class='national-sentiments'>
         <tr>
-          <th></th>
           <th>MALAYSIA</th>
           <th>SINGAPORE</th>
           <th>UNITED STATES</th>
           <th>UNITED KINGDOM</th>
         </tr>
         <tr class='sentimentScores'>
-          <th>Aggregate Sentiment Score</th>
         </tr>
       </table>
       <table class='sentimentWordsFrequency'>
-        <h1>What is the world worried about?</h1>
-        <tr>
-          <th></th>
-          <th title='Informatics and Mathematical Modelling, Technical University of Denmark'>AFINN-111 Score</th>
-          <th>Frequency</th>
-        </tr>
+    </div>
+    <div class='sentiments'>
+      <h1>What's the world thinking about?</h1>
+      <tr>
+        <th></th>
+        <th>AFINN-165 Score</th>
+        <th>Frequency</th>
+      </tr>
       </table>
     </div>
+    <div class='page-title'></div>
     <div class="card-deck">
     </div>
+    <div class='update-time'></div>
   </main>
 
 </html>

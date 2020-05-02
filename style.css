@@ -22,14 +22,14 @@ nav {
     padding: 0;
     text-align: right;
     background: rgba(0,0,0,0);
-    transition: 1s; 
+    transition: 2s; 
     height: 100px;
   }
 
 nav.black {
   background: black;
   color: white;
-  height: 100px;
+  max-height: 15vh;
 }
 
 .logo {
@@ -44,7 +44,34 @@ nav.black {
     cursor: pointer;
   }
 
-button {
+/* ICONS */
+i {
+  font-size: 35px;
+}
+
+.menu-icon {
+  width: 100%;
+  /* background: #000; */
+  text-align: right;
+  box-sizing: border-box;
+  padding: 15px 24px;
+  cursor: pointer;
+  color: #fff;
+  display: none;
+}
+
+.img-icon, .info-icon {
+float: left;
+position: relative;
+margin: 10px 24px;
+cursor: pointer;
+color: black;
+margin-top: 120px;
+}
+
+
+/* BUTTONS */
+  button {
   margin: 24px 16px;
   background: none;
   color: white;
@@ -53,35 +80,15 @@ button {
   text-shadow: 1px 2px black;
   font-weight: 900;
   padding: 15px 32px;
-  /* text-align: center; */
   text-transform: uppercase;
-  /* text-decoration: none; */
-  /* display: inline-block; */
   font-size: 16px;
   }
 
-.menu-icon {
-    width: 100%;
-    height: 12vh;
-    background: #000;
-    text-align: right;
-    box-sizing: border-box;
-    padding: 15px 24px;
-    cursor: pointer;
-    color: #fff;
-    display: none;
+  button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    text-shadow: none;
   }
-  
-.img-icon {
-  /* width: 100%; */
-  /* height: 20vh; */
-  text-align: left;
-  /* box-sizing: border-box; */
-  margin: 10px 24px;
-  font-size: 35px;
-  cursor: pointer;
-  color: black;
-}
 
 @media(max-width: 760px) {
   menu {
@@ -89,19 +96,24 @@ button {
     margin: 10;
     padding: 10;
   }
+
   button {
-    /* max-height: 0px;
-    background: black;
-    box-sizing: border-box;
-    width: 100px; */
     display: none;
-    /* padding: 0;
-    margin:0; */
   }
 
-header {
-  background: none;
-}
+  header {
+  background: black;
+  max-height: 15vh;
+  }
+
+  .info-icon {
+  display: none;
+  }
+
+  .img-icon {
+    display: none;
+    }
+
   .menu-icon {
     display: block;
   }
@@ -114,24 +126,54 @@ header {
 
   .show {
     display: flex;
-    max-height: 20em;
+    max-height: 20vh;
     width: 100%;
     background-color: black;
   }
 }
 
-
-button:hover {
-  background-color: rgba(255, 255, 255, 0.5);
-  color: black;
-  text-shadow: none;
+/* MODAL */
+#modal {
+	background-color: rgba(0,0,0,0.4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+  display: none;
+  overflow: auto;
 }
 
-/* main {
-  margin: 0em auto;
-} */
+h2 {
+  text-decoration: underline;
+  text-align: center;
+}
 
+#modal-textbox {
+  background-color: white;
+  text-align: justify;
+	/* height: 350px; */
+  width: 50%;
+  color:black;
+	/* border-radius: 2px; */
+	margin: 15vh auto;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  padding: 5vh;
+}
+
+.closeModal {
+  cursor: pointer;
+}
 /* MAIN BODY CSS */ 
+
+h1 {
+  text-align: center;
+  margin: 5%;
+  text-transform: uppercase;
+  font-size: 24px;
+}
+
 .overview {
   text-align: center;
   padding: 4px 32px;
@@ -143,7 +185,6 @@ button:hover {
 
 table, td, th {  
   border: .5px solid #efe8dc;
-  /* text-align: left; */
 }
 
 table {
@@ -158,17 +199,7 @@ th {
 th, td {
   padding: 15px;
   width: 20%;
-}
-
-/*WORD CLOUD*/
-.word-cloud {
-  /* background: white; */
-  padding: 2%;
-  margin: 2%;
-  border-radius: 5px;
   text-align: center;
-  font-size: 25px;
-  word-spacing: 20px;
 }
 
 /*IMG CSS*/
@@ -183,7 +214,8 @@ img.show {
   display: block;
 }
 
-/*CARDS CSS*/ 
+
+/*CARDS*/ 
 .card-deck {
     display: flex;
     flex-direction: row;
@@ -207,11 +239,7 @@ img.show {
     overflow: scroll;
   }
 
-/* .card:hover {
-    background-color: rgba(251, 167, 151, 0.2);
-  } */
-
-p {
+.headline {
   margin: 10px;
   line-height: 1.2;
   font-weight: bold;
@@ -222,4 +250,12 @@ p {
 a {
   color: black;
   text-decoration: none;
+}
+
+.positive {
+  background-color:  rgba(49,178,99, 0.7);
+}
+
+.negative {
+  background-color:  rgba(178,49,64, 0.7);
 }
