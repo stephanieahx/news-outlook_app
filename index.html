@@ -5,10 +5,11 @@
   <!--JQuery-->
   <script src="https://code.jquery.com/jquery-3.5.0.min.js"
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <!--jsDelivr for AFINN --->
   <script src='https://cdn.jsdelivr.net/npm/afinn-165@1.0.4/index.json'></script>
   <!--Charts.js-->
-  <script src='https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js'></script>
+  <script src='tableSorter.js'></script>
   <!--Popper-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -147,27 +148,31 @@
   </div>
   <main>
     <div class='overview'>
-      <h1>What's the outlook?</h1>
-      <table class='national-sentiments'>
-        <tr>
-          <th>MALAYSIA</th>
-          <th>SINGAPORE</th>
-          <th>UNITED STATES</th>
-          <th>UNITED KINGDOM</th>
-        </tr>
-        <tr class='sentimentScores'>
-        </tr>
-      </table>
-      <table class='sentimentWordsFrequency'>
-    </div>
-    <div class='sentiments'>
-      <h1>What's the world thinking about?</h1>
-      <tr>
-        <th></th>
-        <th>AFINN-165 Score</th>
-        <th>Frequency</th>
-      </tr>
-      </table>
+      <div class='nationalOutlook'>
+        <h1>What's the outlook?</h1>
+        <table class='national-sentiments'>
+          <tr>
+            <th>MALAYSIA</th>
+            <th>SINGAPORE</th>
+            <th>UNITED STATES</th>
+            <th>UNITED KINGDOM</th>
+          </tr>
+          <tr class='sentimentScores'>
+          </tr>
+        </table>
+      </div>
+      <div class='sentiments'>
+        <h1>What's the world thinking about?</h1>
+        <table id='sentimentTable'>
+          <thead>
+            <tr>
+              <th>Sentiment</th>
+              <th>AFINN-165 Score</th>
+              <th>Frequency</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
     <div class='page-title'></div>
     <div class="card-deck">

@@ -43,22 +43,36 @@ $(() => {
         $('.update-time').append(updatetimeData);
     }
 
-    //-- SENTIMENT ANALYIS -- 
-
-    //GET AFINN OBJECT FROM CDN
-    let afinn = {};
-    jQuery.when(
-        $.getJSON('https://cdn.jsdelivr.net/npm/afinn-165@1.0.4/index.json')).done(function (json) {
-            afinn = json;
-        });
-
+    //ROW COLOUR ACCORDING TO SCORE (POSITIVE OR NEGATIVE)
+    function scoreColor(score) {
+        if (score < 0) {
+            color = 'rgba(178,49,64, 0.7)';
+        } else {
+            color = 'rgba(49,178,99, 0.7)';
+        }
+        return color;
+    }
+    
     //CREATES AN ARRAY OF LOWERCASE WORDS FROM A STRING
     function makeWordArray(headline) {
         let wordArray = headline.toLowerCase().split(/\W/);
         return wordArray;
     }
 
-    // //EMOTICON ACCORDING TO SENTIMENT SCORE  
+    //CREATE WORD ARRAY OF SENTIMENT WORDS IN HEADLINES 
+    function createSentimentWordArray(headlineWordArray) {
+        let sentimentWordArray = [];
+        for (let wordIndex = 0; wordIndex < headlineWordArray.length; wordIndex++) {
+            if (afinn[headlineWordArray[wordIndex]]) {
+                // console.log(headlineWordArray[wordIndex]);
+                sentimentWordArray.push(headlineWordArray[wordIndex]);
+            }
+        }
+        // console.log(sentimentWordArray);
+        return (sentimentWordArray)
+    }
+
+    //EMOTICON ACCORDING TO SENTIMENT SCORE  
     function determineScoreEmoticon(score) {
         if (score > 10) {
             scoreEmoticon = '<i class=\"far fa-laugh-wink\"></i>'
@@ -76,6 +90,15 @@ $(() => {
         return scoreEmoticon;
     }
 
+    //-- SENTIMENT ANALYIS -- 
+
+    //GET AFINN OBJECT FROM CDN
+    let afinn = {};
+    jQuery.when(
+        $.getJSON('https://cdn.jsdelivr.net/npm/afinn-165@1.0.4/index.json')).done(function (json) {
+            afinn = json;
+        });
+
     //CALCULATES SENTIMENT BY COMPARING EACH WORD WITH AFINN OBJECT
     function calculateSentimentScore(wordArray) {
         let score = 0;
@@ -85,16 +108,6 @@ $(() => {
             }
         }
         return score;
-    }
-
-    //COLOUR ACCORDING TO INTEGER - POSITIVE (GREEN) OR NEGATIVE (RED) SCORE
-    function scoreColor(score) {
-        if (score < 0) {
-            color = 'rgba(178,49,64, 0.7)';
-        } else {
-            color = 'rgba(49,178,99, 0.7)';
-        }
-        return color;
     }
 
     //CREATES AN OBJECT OF SENTIMENT WORDS WITH THEIR AFINN SCORE AND THEIR FREQUENCY IN HEADLINES THEN CREATES A TABLE TO DISPLAY THIS DATA
@@ -121,7 +134,7 @@ $(() => {
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
                 </tr>
                 `
-                $('.sentimentWordsFrequency').append(wordData);
+                $('#sentimentTable').append(wordData);
 
 
             } else {
@@ -133,28 +146,16 @@ $(() => {
                 let rowColor = scoreColor(prevailingSentimentObject[sortedArray[wordIndex]].score);
                 let wordData = `
                 <tr style='background-color:${rowColor}'>
-                    <td>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
-                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
-                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
+                    <td class='wordCol'>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
+                    <td class='scoreCol'>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
+                    <td class='frequencyCol'>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
                 </tr>
                 `
-                $('.sentimentWordsFrequency').append(wordData);
+                $('#sentimentTable').append(wordData);
             }
+            $('#sentimentTable').tablesorter();
         }
         return prevailingSentimentObject;
-    }
-
-    //CREATE WORD ARRAY OF SENTIMENT WORDS IN HEADLINES 
-    function createSentimentWordArray(headlineWordArray) {
-        let sentimentWordArray = [];
-        for (let wordIndex = 0; wordIndex < headlineWordArray.length; wordIndex++) {
-            if (afinn[headlineWordArray[wordIndex]]) {
-                // console.log(headlineWordArray[wordIndex]);
-                sentimentWordArray.push(headlineWordArray[wordIndex]);
-            }
-        }
-        // console.log(sentimentWordArray);
-        return (sentimentWordArray)
     }
 
     //OUTLOOK TABLE FOR SENTIMENT ANALYSIS 
@@ -184,11 +185,15 @@ $(() => {
                 //A COUNTRY'S PREVAILING SENTIMENT ANALYSIS - CREATES A TABLE TO LIST SENTIMENT WORDS WITH ITS AFINN-SCORE AND FREQUENCY IN CURRENT HEADLINES
                 createPrevailingSentimentObject(countrySentimentWordArray);
                 //DISPLAYS TIME OF LATEST UPDATE
+            },
+            complete: function () {
                 displayUpdateTime();
-            }
+            },
+            error: function () {
+                alert('Error');
+            },
         })
     }
-
 
     // -- NEWS CARDS -- 
 
@@ -240,14 +245,12 @@ $(() => {
                 displayUpdateTime();
             },
             error: function () {
-                alert('Error.');
+                alert('Error');
             },
 
         });
 
     })
 
-    //TOOL TIP FOR EACH CARD SHOWING THE HEADLINE'S SENTIMENT SCORE
-    $().tooltip();
 
 })
