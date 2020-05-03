@@ -49,83 +49,103 @@
             <div class='closeModal'>
               <i style='float: right' class="fas fa-times"></i>
             </div>
-            <h1>ABOUT NEWS OUTLOOK</h1>
-            <p>Hello there. This site performs rudimentary sentiment analyses of the latest news headlines.</p>
-            <p>The sentiment is determined by matching indvidual words within the text against AFINN-165. Aggregate
-              sentiment scores of headlines are calculated and displayed as raw numbers or as emoticons. This is not the
-              most sophisticated way to analyse sentiment but it's the best I can do right now ¯\_(ツ)_/¯</p>
-            <h2>AFINN-165</h2>
-            <p>Developed by Danish data scientist Finn Årup Nielsen, AFINN is one of the simplest lexicons for sentiment
-              analysis.</p>
-            <p>The current version of the lexicon is AFINN-165 and it contains over three thousand words with a polarity
-              score ranging from [- 5] to [5] associated with each word.</p>
-            <p>Positive words (adjectives, verbs, nouns and exclamations) have positive sentiment scores. While negative
-              words have negative scores. The more emotive the word, the larger its score's value. For instance -
+            <div class='about'>
+              <h1>ABOUT NEWS OUTLOOK</h1>
+              <p>Hello there. This site performs rudimentary sentiment analyses of the latest news headlines.</p>
+              <p>The sentiment is determined by matching indvidual words within the text against AFINN-165. Aggregate
+                sentiment scores of headlines are calculated and displayed as raw numbers or as emoticons. This is not
+                the
+                most sophisticated way to analyse sentiment but it's the best I can do right now ¯\_(ツ)_/¯</p>
+            </div>
+            <div class='about-afinn'>
+              <h2>AFINN-165</h2>
+              <p>Developed by Danish data scientist Finn Årup Nielsen, AFINN is one of the simplest lexicons for
+                sentiment
+                analysis.</p>
+              <p>The current version of the lexicon is AFINN-165 and it contains over three thousand words with a
+                polarity
+                score ranging from [- 5] to [5] associated with each word.</p>
+              <p>Positive words (adjectives, verbs, nouns and exclamations) have positive sentiment scores. While
+                negative
+                words have negative scores. The more emotive the word, the larger its score's value. For instance -
+                <table>
+                  <tr>
+                    <td class='positive'>Adorable</td>
+                    <td class='positive'>3</td>
+                    <td class='negative'>Hideous</td>
+                    <td class='negative'>- 3</td>
+                  </tr>
+                  <tr>
+                    <td class='positive'>Promote</td>
+                    <td class='positive'>1</td>
+                    <td class='negative'>Deny</td>
+                    <td class='negative'>- 2</td>
+                  </tr>
+                  <tr>
+                    <td class='positive'>God</td>
+                    <td class='positive'>1</td>
+                    <td class='negative'>Wanker</td>
+                    <td class='negative'>- 3</td>
+                  </tr>
+                  <tr>
+                    <td class='positive'>ROFLMAO</td>
+                    <td class='positive'>4</td>
+                    <td class='negative'>WTF</td>
+                    <td class='negative'>- 4</td>
+                  </tr>
+                </table>
+              </p>
+              <small>
+                Source:
+                <br><a href='https://github.com/fnielsen/afinn'>Finn Årup Nielsen and the Technical University of
+                  Denmark
+                  (2015)</a>
+              </small>
+            </div>
+            <div class='about-newsapi'>
+              <h2><a href='https://newsapi.org/'>News API</a></h2>
+              <p>All news articles and headlines here are fetched from newsAPI.org</p>
+              <p>The page displays the latest and top headlines on each click, filtered by the country or word you select.</p>
+              <small>
+                Source:
+                <br><a href='https://newsapi.org/'>NewsAPI.org</a>
+              </small>
+            </div>
+            <div class='about-smileyscale'>
+              <h2>The Sentiment Smiley Scale</h2>
+              <p>By no means a scientific measurement - the outlook of each country is represented by an emoticon.</p>
+              <p>How happy, indifferent, or sad the smiley/frowny face looks is determined by the aggregate AFINN score of all the latest news headlines from that particular country.</p>
               <table>
                 <tr>
-                  <td class='positive'>Adorable</td>
-                  <td class='positive'>3</td>
-                  <td class='negative'>Hideous</td>
-                  <td class='negative'>- 3</td>
+                  <th>Outlook</th>
+                  <th>Aggregate AFINN-165 Score</th>
                 </tr>
                 <tr>
-                  <td class='positive'>Promote</td>
-                  <td class='positive'>1</td>
-                  <td class='negative'>Deny</td>
-                  <td class='negative'>- 2</td>
+                  <td><i class="far fa-laugh-wink"></i></td>
+                  <td>Greater than or equal to 10</td>
                 </tr>
                 <tr>
-                  <td class='positive'>God</td>
-                  <td class='positive'>1</td>
-                  <td class='negative'>Wanker</td>
-                  <td class='negative'>- 3</td>
+                  <td><i class="far fa-smile"></i></td>
+                  <td>Less than 10 and greater than or equal to 5</td>
                 </tr>
                 <tr>
-                  <td class='positive'>ROFLMAO</td>
-                  <td class='positive'>4</td>
-                  <td class='negative'>WTF</td>
-                  <td class='negative'>- 4</td>
+                  <td><i class="far fa-meh"></i></td>
+                  <td>Less than or equal to 5 and greater than 0</td>
+                </tr>
+                <tr>
+                  <td><i class="far fa-frown"></i></td>
+                  <td>Greater than - 5 and less than or equal to 0</td>
+                </tr>
+                <tr>
+                  <td><i class="far fa-sad-tear"></i></td>
+                  <td>Less than -5 and greater than or equal to -10</td>
+                </tr>
+                <tr>
+                  <td><i class="far fa-sad-cry"></i></td>
+                  <td>Less than -10</td>
                 </tr>
               </table>
-            </p>
-            <small>
-              Source:
-              <br><a href='https://github.com/fnielsen/afinn'>Finn Årup Nielsen and the Technical University of Denmark
-                (2015)</a>
-            </small>
-            </ul>
-            <h2>The Sentiment Smiley Scale</h2>
-            <p></p>
-            <table>
-              <tr>
-                <th>Outlook</th>
-                <th>Aggregate AFINN-165 Score</th>
-              </tr>
-              <tr>
-                <td><i class="far fa-laugh-wink"></i></td>
-                <td>Greater than or equal to 10</td>
-              </tr>
-              <tr>
-                <td><i class="far fa-smile"></i></td>
-                <td>Less than 10 and greater than or equal to 5</td>
-              </tr>
-              <tr>
-                <td><i class="far fa-meh"></i></td>
-                <td>Less than or equal to 5 and greater than 0</td>
-              </tr>
-              <tr>
-                <td><i class="far fa-frown"></i></td>
-                <td>Greater than - 5 and less than or equal to 0</td>
-              </tr>
-              <tr>
-                <td><i class="far fa-sad-tear"></i></td>
-                <td>Less than -5 and greater than or equal to -10</td>
-              </tr>
-              <tr>
-                <td><i class="far fa-sad-cry"></i></td>
-                <td>Less than -10</td>
-              </tr>
-            </table>
+            </div>
           </div>
         </div>
         <!-- BUTTON - displays images of news articles-->
@@ -151,7 +171,7 @@
     <div class='overview'>
       <div id="national">
         <container class='nationalOutlook'>
-          <h1>What's the outlook?</h1>
+          <h1 style='font-size:10vh'>What's the outlook?</h1>
           <table class='national-sentiments'>
             <tr>
               <th>MALAYSIA</th>
