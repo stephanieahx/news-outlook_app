@@ -7,6 +7,24 @@ $(() => {
     $('.closeModal').on('click', function (e) {
         $('#modal').css('display', 'none');
     })
+    //PROGRESS WHEEL LOADER
+    function pageLoading() {
+        $('#loader').addClass('show');
+    }
+    function pageLoadingComplete() {
+        $('#loader').removeClass('show');
+    }
+    //CLEARS PAGE FOR NEWS HEADLINE CARDS
+    function clearPage() {
+        $('div.overview').attr('class', 'overview-hide');
+        //EMPTIES CARD DECK
+        $('.card-deck').empty();
+        //CLEARS UPDATE TIME
+        $('update-time').empty();
+        //CLEAR PAGE TITLE
+        $('.page-title').empty();
+    }
+
     //LOGO REFRESH PAGE BUTTON 
     $('.logo').on('click', function (e) {
         e.preventDefault();
@@ -43,7 +61,7 @@ $(() => {
         $('.update-time').append(updatetimeData);
     }
 
-    //ROW COLOUR ACCORDING TO SCORE (POSITIVE OR NEGATIVE)
+    //ROW COLOUR (GREEN OR RED) ACCORDING TO SCORE (POSITIVE OR NEGATIVE)
     function scoreColor(score) {
         if (score < 0) {
             color = 'rgba(178,49,64, 0.7)';
@@ -52,7 +70,7 @@ $(() => {
         }
         return color;
     }
-    
+
     //CREATES AN ARRAY OF LOWERCASE WORDS FROM A STRING
     function makeWordArray(headline) {
         let wordArray = headline.toLowerCase().split(/\W/);
@@ -129,7 +147,7 @@ $(() => {
                 let rowColor = scoreColor(prevailingSentimentObject[sortedArray[wordIndex]].score);
                 let wordData = `
                 <tr style='background-color:${rowColor}'>
-                    <td>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
+                    <td class='sentimentWordSearch'>${prevailingSentimentObject[sortedArray[wordIndex]].word}</td>
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
                     <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
                 </tr>
@@ -146,9 +164,9 @@ $(() => {
                 let rowColor = scoreColor(prevailingSentimentObject[sortedArray[wordIndex]].score);
                 let wordData = `
                 <tr style='background-color:${rowColor}'>
-                    <td class='wordCol'>"${prevailingSentimentObject[sortedArray[wordIndex]].word}"</td>
-                    <td class='scoreCol'>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
-                    <td class='frequencyCol'>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
+                    <td class='sentimentWordSearch'>${prevailingSentimentObject[sortedArray[wordIndex]].word}</td>
+                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].score}</td>
+                    <td>${prevailingSentimentObject[sortedArray[wordIndex]].frequency}</td>
                 </tr>
                 `
                 $('#sentimentTable').append(wordData);
@@ -184,7 +202,6 @@ $(() => {
                 let countrySentimentWordArray = createSentimentWordArray(headlineWordArray);
                 //A COUNTRY'S PREVAILING SENTIMENT ANALYSIS - CREATES A TABLE TO LIST SENTIMENT WORDS WITH ITS AFINN-SCORE AND FREQUENCY IN CURRENT HEADLINES
                 createPrevailingSentimentObject(countrySentimentWordArray);
-                //DISPLAYS TIME OF LATEST UPDATE
             },
             complete: function () {
                 displayUpdateTime();
@@ -197,16 +214,9 @@ $(() => {
 
     // -- NEWS CARDS -- 
 
-    //CREATES CARDS OF NEWS HEADLINES WHEN COUNTRY-BUTTON IS CLICKED
+    //CREATES CARDS OF NEWS HEADLINES FROM EACH COUNTRY WHEN COUNTRY-BUTTON IS CLICKED
     $('button').on('click', function () {
-        //HIDES OVERVIEW
-        $('div.overview').attr('class', 'overview-hide');
-        //EMPTIES CARD DECK
-        $('.card-deck').empty();
-        //CLEARS UPDATE TIME
-        $('update-time').empty();
-        //CLEAR PAGE TITLE
-        $('.page-title').empty();
+        clearPage();
         //CREATING PAGE TITLE
         let countryName = $(event.currentTarget).html();
         let title = `
@@ -220,6 +230,13 @@ $(() => {
             url: url,
             method: 'GET',
             dataType: 'JSON',
+            beforeSend: function () {
+                pageLoading();
+            },
+            complete: function () {
+                pageLoadingComplete();
+                displayUpdateTime();
+            },
             success: function (newsdata) {
                 let articlesObject = newsdata.articles;
                 let headline;
@@ -234,15 +251,12 @@ $(() => {
                     newsCards += `
                     <div class='card' title='Sentiment Score: ${headlineSentimentScore}'> 
                     <img src='${articleImg}'>
-                    <a href='${articleLink}'><p class='headline'>${headline}</p></h5>
+                    <a href='${articleLink}'><p class='headline'>${headline}</p>
                     </div>
                     `;
                     $(".card-deck").append(newsCards);
                     // console.log(makeWordArray(headline));
                 }
-            },
-            complete: function () {
-                displayUpdateTime();
             },
             error: function () {
                 alert('Error');
@@ -250,7 +264,58 @@ $(() => {
 
         });
 
-    })
+    });
 
+    //CREATES NEWS CARDS OF NEWS HEADLINES CONTAINING A SENTIMENT WORD WHEN WORDS IN 'SENTIMENT' COLUMN ARE CLICKED
+    $('#sentimentTable').on('click', 'td.sentimentWordSearch', function (event) {
+        clearPage();
+        //DETERMINING SEARCH QUERY TO FILTER HEADLINES & CREATE PAGE TITLE
+        let wordQuery = $(this).text();
+        //CREATING PAGE TITLE
+        let title = `<h1>Latest News Headlines Mentioning '${wordQuery}'</h1>`
+        $('.page-title').append(title);
+        //CREATING API URL FOR EACH COUNTRY
+        const countryArray = ['my', 'sg', 'gb', 'us'];
+        for (countryIndex = 0; countryIndex < countryArray.length; countryIndex++) {
+            let countryUrl = 'https://newsapi.org/v2/top-headlines?' + 'country=' + countryArray[countryIndex] + '&apiKey=82fe58b2a7bf409093b32e883f0dee11'
+            //AJAX CALL
+            $.ajax({
+                url: countryUrl,
+                method: 'GET',
+                dataType: 'JSON',
+                beforeSend: function () {
+                    pageLoading();
+                },
+                complete: function () {
+                    pageLoadingComplete();
+                    displayUpdateTime();
+                },
+                success: function (newsdata) {
+                    let articlesObject = newsdata.articles;
+                    let headline;
+                    let articleLink;
+                    let articleImg;
+                    for (let i = 0; i < articlesObject.length; i++) {
+                        headline = articlesObject[i].title;
+                        articleLink = articlesObject[i].url;
+                        articleImg = articlesObject[i].urlToImage;
+                        let newsCards = '';
+                        if (headline.includes(wordQuery)) {
+                            newsCards += `
+                        <div class='card'> 
+                        <img src='${articleImg}'>
+                        <a href='${articleLink}'><p class='headline'>${headline}</p>
+                        </div>
+                        `;
+                            $(".card-deck").append(newsCards);
+                        }
+                    }
+                },
+                error: function () {
+                    alert('Error');
+                },
+            })
+        }
+    });
 
 })

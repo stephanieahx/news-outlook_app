@@ -146,22 +146,25 @@
       </nav>
     </header>
   </div>
+  <!-- MAIN CONTENT -->
   <main>
     <div class='overview'>
-      <div class='nationalOutlook'>
-        <h1>What's the outlook?</h1>
-        <table class='national-sentiments'>
-          <tr>
-            <th>MALAYSIA</th>
-            <th>SINGAPORE</th>
-            <th>UNITED STATES</th>
-            <th>UNITED KINGDOM</th>
-          </tr>
-          <tr class='sentimentScores'>
-          </tr>
-        </table>
+      <div id="national">
+        <container class='nationalOutlook'>
+          <h1>What's the outlook?</h1>
+          <table class='national-sentiments'>
+            <tr>
+              <th>MALAYSIA</th>
+              <th>SINGAPORE</th>
+              <th>UNITED STATES</th>
+              <th>UNITED KINGDOM</th>
+            </tr>
+            <tr class='sentimentScores'>
+            </tr>
+          </table>
+        </container>
       </div>
-      <div class='sentiments'>
+      <container class='sentiments'>
         <h1>What's the world thinking about?</h1>
         <table id='sentimentTable'>
           <thead>
@@ -172,9 +175,10 @@
             </tr>
           </thead>
         </table>
-      </div>
+      </container>
     </div>
     <div class='page-title'></div>
+    <div id='loader'></div>
     <div class="card-deck">
     </div>
     <div class='update-time'></div>
